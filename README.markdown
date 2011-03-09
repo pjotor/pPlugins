@@ -10,29 +10,31 @@ Plugin List:
  * CamelCase String
  * Hex Encode/Decode
  * LZW Packer/Unpacker
- * Vignetter
  * Fuzzy Time
+ * PubSub Hooks
 
 ### Style Getter
 
 Returns an object with style information from the Style element (not computed style).
 This will only return Legal style attributes, no data stored or non-supported browser vendor styles.
 
-    // .myCoolColor { color: #BADA55; }
-    $.cssStyle(".myCoolColor").color --> "rgb(186, 218, 85)"
+		// .myCoolColor { color: #BADA55; }
+		$.cssStyle(".myCoolColor").color --> "rgb(186, 218, 85)"
 
+
+Depends on the String Mapper
 
 ### String Mapper
 
 Creates an Object based on parsing the supplied string.
 Uses the stings ";" as default KeyVal-pair divider and ":" as key-value divider.
 
-    var myObj = $.map.str("the: string; you:supply will be; parsed: and turned in:to; some-object: like this");
-    JSON.stringify(myObj) --> '{"the":"string","you":"supply will be","parsed":"and turned in:to","someObject":"like this"}'
-
+		var myObj = $.map.str("the: string; you:supply will be; parsed: and turned in:to; some-object: like this");
+		JSON.stringify(myObj) --> '{"the":"string","you":"supply will be","parsed":"and turned in:to","someObject":"like this"}'
+		
 		// Lets say the document location is: http://localhost/?hello=world&and=space%20to
-    var myOtherObj = $.map.str(document.location.search.substr(1));
-    JSON.stringify(myOtherObj) --> '{"hello":"world","and":"space%20to"}'
+		var myOtherObj = $.map.str(document.location.search.substr(1));
+		JSON.stringify(myOtherObj) --> '{"hello":"world","and":"space%20to"}'
 
 Depends on the CamelCase-plugin ( or the native jQuery $.camelCase ).
 
@@ -47,10 +49,10 @@ Code ripped from the jQuery core, since it seem to come and go.
 
 Replaces named containers with values corresponding with matching keys.
 
-    var myString = "my {color} {fruit}";
-    var myValues = { color: "red", fruit: "apple" }
-    $.prep(myString, myValues) --> "my red apple"
-
+		var myString = "my {color} {fruit}";
+		var myValues = { color: "red", fruit: "apple" }
+		$.prep(myString, myValues) --> "my red apple"
+		
 		//as String prototype
 		"my {color} {fruit}".prep({ color: "red", fruit: "apple" }) --> "my red apple"
 
@@ -82,5 +84,21 @@ A little verbose time teller.
 		
 		var someDate = new Date(2000, 01, 01, 23, 18, 00);
 		$.fuzz(someDate) --> "it's right after a quarter past eleven"
+		
+
+### PubSub Hooks
+
+Add hooks to your pub/sub architecture
+
+		// For <a href="some/action" class="myAction">Do The Action</a>
+		$(".myAction").pubsub() 
+		
+		// For <a href="#" class="myAction" pub="some/action">Do The Action</a>
+		$(".myAction").pubsub() 
+		
+		// For <a href="#" class="myAction">Do The Action</a>
+		$(".myAction").pubsub("some/action") 
+		
+		--> click will fire a pub to "some/action", with the event and target, $(this) as arguments		
 		
 		
